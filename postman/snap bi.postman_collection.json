@@ -1,0 +1,1062 @@
+{
+	"info": {
+		"_postman_id": "d048f72b-ce3e-409d-a621-131bf8687f7c",
+		"name": "snap bi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29955721"
+	},
+	"item": [
+		{
+			"name": "Postman Utility Lib",
+			"item": [
+				{
+					"name": "Lib install",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code should be 200\", function () {",
+									"    pm.response.to.have.status(200)",
+									"    pm.globals.set(\"pmlib_code\", responseBody)",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://joolfe.github.io/postman-util-lib/dist/bundle.js",
+							"protocol": "https",
+							"host": [
+								"joolfe",
+								"github",
+								"io"
+							],
+							"path": [
+								"postman-util-lib",
+								"dist",
+								"bundle.js"
+							]
+						},
+						"description": "Load the postman-util-lib from github.io and load into postman global variable."
+					},
+					"response": []
+				},
+				{
+					"name": "Lib use example",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"// Loading the library",
+									"eval(pm.globals.get('pmlib_code'))",
+									"",
+									"",
+									"// Generate a PKCE challenge",
+									"const challenge  = pmlib.pkceChallenge()",
+									"console.log('PKCE challenge: ' +JSON.stringify(challenge))",
+									"",
+									"",
+									"// Obtain the SHA-256 from a string",
+									"const sha256String = pmlib.sha256('example string')",
+									"console.log('\"client_secret_jwt\": ' +sha256String)",
+									"",
+									"",
+									"// Create a client assertion 'client_secret_jwt'",
+									"const clientSecretJwt = pmlib.clientAssertSecret('mySecret', 'myIss', 'myAUD')",
+									"console.log('\"client_secret_jwt\": ' +clientSecretJwt)",
+									"",
+									"",
+									"// JWK used by jwt signature",
+									" const jwk = {",
+									"      \"e\": \"AQAB\",",
+									"      \"n\": \"7-ql2BxRpd5PEKs9h6oouoLJSK1PZgElYnHtC1EvtBcJ5rsPhRLQ95SFuzMVuPzrRymTx2DAiYrFryNNGvYgGMjwjZZ6gL0FebxGooY9P_voShuzNOg22n9aayqM7U61pmfSsu_0Gm8ZFu0hZa4VT7xn_LFIZnB_BTwG9EZtIwyGdHitMcakvdgOjTTmLqzdSjqie_7IHJrLb9JFPLrYsUDGU3v7U4joKwyZWCbaBRLrhmsAxbKhfGBA-zdSAMVtKTuu4HuQ8gnEmYpdL2wZjLH1EpxZpl_dbojzKqqGqDW7inz1SE1y4A86DE4kIzVWMqltxeMpamGOyBtSKYp5Xw\",",
+									"      \"d\": \"7yt3myJYDse5AEAFfdoW8h_xcx862NBpqWMzUSXlLV4OQ9LVXO7uHPIWAxGhJSIVloKPTKJaLoOGINtLQYZ9ZtfiXvPVOcO10q7rp5e1NbT10_MbSrH4BQgSZmUrymK92Z8Ev9dP_I4mb-GDeq75ldyXuaQuLdkV92zo7dnLcLRciQsFsBirOOICp0RjGdCgoAZMfM5WIvRJ7XYsXP2qGMEOdyeTo3MGWZIYJGSOLvh1OMsWrrqQmPPuh0qnWj5IccJsWQv8oSNPVah9K0b0Zgv5-anr6ZkR33_vr6nK7SiZNIAH48mOrGVKGEyAZGsgoyrNhSVOg39l5jFwkamHUQ\",",
+									"      \"p\": \"_kSDQ1oCxkTAUjSfsiZ-lj_ineDSTbcfYEP1WyhnNwfUbVP33QYAGg8f36xL65JKZAo4GaZvsVytaqiOiU5u1FFh0Tm7sRU6qG-YjYM0pynsptpQgh4p9mQ0WoURmXoryzIrqq8TRQA871gql14HVavydUrd1Gz10QJkn5cqhJk\",",
+									"      \"q\": \"8Y0at7FhEtALdBH-L-m2Y4hI9iecA-Y6FXspsiPN4ILXmdO2V1W7pJ9uj-pBt2CWdZbBptd4w3rHiECHOXDYBsn-AjRDwcPRWnhiL_TM4TSlWtyuTAcRg7b_tSWY8ptkIH9nDHYi5_VtdkIWg74Z3oFxWZYS9SKbURnzJ8AxMLc\",",
+									"      \"dp\": \"papmC9_9psjstaLr2dsS5zpAoLT20QPbQZGFrxsoBMbpNUJcYHmkX1YzYjyUSqxKI9w0qSGz7E-B_dhM5lFgDJ3pqbSAAeTfDxeGwc0W5UN_mUbs5ZpZpNus8L16thDPr9jEcrUXTQHWsesz9OOiy8L4ekuJNPq5PrDcds67OSE\",",
+									"      \"dq\": \"SZXf5sf9t5pzcsesdPIw4v94oqyMZc-0MCkWGbO4m0Wg4rbRXKe8gzkimGsX3AJrs6Tal7YajwqPUJ2_1CrhVKgiXo-HeLbrxzDXUJ6174F3QkfqPTUGC-cq3Qd4IahfB1tojC5NEfb9gsI9U6MNBHDQlCcY3V7OjBVostpk4d8\",",
+									"      \"qi\": \"M76jNmuSeQHB5niL0mhtOazj1gQ_gI69yqoCDKgG9lbb1-C1uQ_bpozc9gTwvG0OZ_iqcJ_vNm_vj3d4-2_g8Njm8KTdzILLSw8v4aV-EGijyHPJtJii91SyZY39ZDT-SaWIXAL55aIF5ZfsBhmpwcXK9iCLjy1z2sIjzo023SU\",",
+									"      \"kty\": \"RSA\",",
+									"      \"kid\": \"259337db-7412-45da-ad86-b63c97796588\",",
+									"      \"use\": \"sig\"",
+									"    }",
+									"// Create a signed jwt (JWS)",
+									"const jws = pmlib.jwtSign(jwk, { aud: 'myAUD', iss: 'myIss', claim: 'my CustomClaim' })",
+									"console.log('Signed JWT: ' +jws)",
+									"",
+									"",
+									"// Create a client assertion 'private_key_jwt'",
+									"const privateKeyJwt = pmlib.clientAssertPrivateKey(jwk,'myIss', 'myAUD')",
+									"console.log('\"private_key_jwt\": ' +privateKeyJwt)",
+									"",
+									"// Use 'jsrsasign' library",
+									"const base64String = pmlib.rs.stob64u('My amazing string')",
+									"console.log('Url Base64 string: ' + base64String)",
+									"",
+									"",
+									"// RSAOAEP signature example",
+									"const pubkey = '-----BEGIN PUBLIC KEY-----\\n' +",
+									"'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAstXEkU/agbNkQgh6a9DV\\n' +",
+									"'C/WXGmNy8g+hdTOBhYUk5PfZCwTNt5SCYBLjIPhs2ZRrNuCN3PhwHRQPQOTsS6Nl\\n' +",
+									"'Bzw+SjPVFBhPcbMHbJWnC87Q5ID/uAuwJjcUQXUTVspwIgfRmHvuuT7w7AYnCNvz\\n' +",
+									"'B5TuPj2vVH8rij9BXkAHambaeGG7L10MPeUiVU6M0F/QKCJhEWAYGEt4NffSXETx\\n' +",
+									"'zHSl8nyXxVJfnjxVhnZyZVXTIpLwvRy04hnkAoFexh7npRtnQdsLuIHtaJsm7gFY\\n' +",
+									"'mxhr3Nxbh9p1pC7fHpJ+jMcxAAhA07WqYf6lOsxXHfPav1FEMX214YTsKTw68xqo\\n' +",
+									"'DwIDAQAB\\n' +",
+									"'-----END PUBLIC KEY-----\\n'",
+									"const fileContent = 'My file content comes here...'",
+									"var keyObj = pmlib.rs.KEYUTIL.getKey(pubkey)",
+									"const encHex = pmlib.rs.KJUR.crypto.Cipher.encrypt(fileContent, keyObj, 'RSAOAEP')",
+									"console.log(encHex)",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verify the returned JWT ",
+									"const pubkey = '-----BEGIN PUBLIC KEY-----\\n' +",
+									"'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAstXEkU/agbNkQgh6a9DV\\n' +",
+									"'C/WXGmNy8g+hdTOBhYUk5PfZCwTNt5SCYBLjIPhs2ZRrNuCN3PhwHRQPQOTsS6Nl\\n' +",
+									"'Bzw+SjPVFBhPcbMHbJWnC87Q5ID/uAuwJjcUQXUTVspwIgfRmHvuuT7w7AYnCNvz\\n' +",
+									"'B5TuPj2vVH8rij9BXkAHambaeGG7L10MPeUiVU6M0F/QKCJhEWAYGEt4NffSXETx\\n' +",
+									"'zHSl8nyXxVJfnjxVhnZyZVXTIpLwvRy04hnkAoFexh7npRtnQdsLuIHtaJsm7gFY\\n' +",
+									"'mxhr3Nxbh9p1pC7fHpJ+jMcxAAhA07WqYf6lOsxXHfPav1FEMX214YTsKTw68xqo\\n' +",
+									"'DwIDAQAB\\n' +",
+									"'-----END PUBLIC KEY-----\\n'",
+									"const body = JSON.parse(responseBody)",
+									"const result = pmlib.jwtVerify(body.jwt, pubkey)",
+									"console.log('Descoded JWT: '  + JSON.stringify(result))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "https://joolfe.github.io/postman-util-lib/dist/fakeresponse.json",
+							"protocol": "https",
+							"host": [
+								"joolfe",
+								"github",
+								"io"
+							],
+							"path": [
+								"postman-util-lib",
+								"dist",
+								"fakeresponse.json"
+							]
+						},
+						"description": "Some usefull example about how to use the library."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "get token",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"eval(pm.globals.get('pmlib_code'));",
+							"",
+							"Date.prototype.toIsoString = function() {",
+							"    var tzo = -this.getTimezoneOffset(),",
+							"        dif = tzo >= 0 ? '+' : '-',",
+							"        pad = function(num) {",
+							"            var norm = Math.floor(Math.abs(num));",
+							"            return (norm < 10 ? '0' : '') + norm;",
+							"        };",
+							"    return this.getFullYear() +",
+							"        '-' + pad(this.getMonth() + 1) +",
+							"        '-' + pad(this.getDate()) +",
+							"        'T' + pad(this.getHours()) +",
+							"        ':' + pad(this.getMinutes()) +",
+							"        ':' + pad(this.getSeconds()) +",
+							"        '.' + this.getMilliseconds() + ",
+							"        dif + pad(tzo / 60) +",
+							"        ':' + pad(tzo % 60);",
+							"}",
+							"",
+							"var dt = new Date();",
+							"var timestamp = dt.toIsoString();",
+							"postman.setEnvironmentVariable('timestamp', timestamp);",
+							"",
+							"var prvKeyPEM = pm.environment.get(\"private_key\");",
+							"var clientid = pm.environment.get(\"client_id\");",
+							"",
+							"",
+							"console.log(prvKeyPEM);",
+							"",
+							"// Use 'jsrsasign' library",
+							"const base64String = pmlib.rs.stob64u('My amazing string')",
+							"console.log('Url Base64 string: ' + base64String)",
+							"",
+							"var sig = new pmlib.rs.KJUR.crypto.Signature({\"alg\": \"SHA256withRSA\"});",
+							"console.log(sig);",
+							"sig.init(prvKeyPEM);",
+							"sig.updateString(clientid+'|'+timestamp);",
+							"var hSigVal = sig.sign();",
+							"",
+							"postman.setEnvironmentVariable('signature', hexToBase64(hSigVal));",
+							"postman.setEnvironmentVariable('signature_hex', hSigVal);",
+							"",
+							"",
+							"function hexToBase64(hexstring) {",
+							"    return btoa(hexstring.match(/\\w{2}/g).map(function(a) {",
+							"        return String.fromCharCode(parseInt(a, 16));",
+							"    }).join(\"\"));",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.globals.set(\"access_token_bri\", jsonData.accessToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-SIGNATURE",
+						"value": "{{signature_hex}}",
+						"type": "text"
+					},
+					{
+						"key": "X-CLIENT-KEY",
+						"value": "{{client_id}}",
+						"type": "text"
+					},
+					{
+						"key": "X-TIMESTAMP",
+						"value": "{{timestamp}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"grantType\": \"client_credentials\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/snap/access-token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"snap",
+						"access-token"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "get token",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-SIGNATURE",
+								"value": "{{signature_hex}}",
+								"type": "text"
+							},
+							{
+								"key": "X-CLIENT-KEY",
+								"value": "{{client_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-TIMESTAMP",
+								"value": "{{timestamp}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"grantType\": \"client_credentials\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/snap/access-token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"snap",
+								"access-token"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Mon, 25 Sep 2023 05:11:00 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"30f-3ZyNSkRxGJtv1ve8mIUGhQZIUyY\""
+						},
+						{
+							"key": "x-correlation-id",
+							"value": "aa5f4d3a-6736-47b0-8fb6-5d33aa09f477"
+						},
+						{
+							"key": "x-powered-by",
+							"value": "Express"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=eWXUlW9fVAWN6T380meOxFDTa6LME2S30xLV%2FA7ZVD1Rx1cpzfRk%2BkBie9lnLbNWZ%2B879RPKcHq8jHkn33nwY%2FoGN7hDAYdUN8rRAvSDUflY8iitks2rS%2FUkn0K5RypYBwF54i2AcyO5\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "80c0c3923b732421-IAD"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"accessToken\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3eHVuQ3FSMXVYNkZlTkRwIiwiZXhwIjoxNjk1NjIyMjYwLCJpc3MiOiJodHRwczovL2FwaS5taW5pcGMtcmVtb3RlLnNpdGUvb2F1dGgtdjIiLCJhdWQiOiJodHRwczovL2FwaS5taW5pcGMtcmVtb3RlLnNpdGUvb2F1dGgtdjIiLCJzY29wZSI6Im9wZW5pZCBvZmZsaW5lX2FjY2VzcyBwcm9maWxlIHJvbGVzIiwicm9sZXMiOiJTTkFQLUJJIiwicHJvZmlsZSI6eyJ1c2VySUQiOiJ3eHVuQ3FSMXVYNkZlTkRwIn0sImlhdCI6MTY5NTYxODY2MH0.l-HQtck8wvJxPS1FLbPTMla9G8sxtNELvjKDJiWDRgtVrZXquLrVUQ9_TINw4lU4FbOFKMcQTxpoX_foBPkun0a84Eo8YuOZ2ZZmpSDbrlJqHGnXWCw9mMAdgnBWCDFK4k33nLJjGYzLWjtKN21S2_Lph1hWfkK6ALofZZWf7TGB4rLTqdvKTkMbHRigpQEtNkSVzW0gGiJ9NckIkCYSGDKbVh8-2yS9h1lXIDDL2swe4MjC0cud-neKSftx0w7654pTxKSiavZr4lgxMbdtUYzVAO4vPkHasNL2ZMqK-fDJv9sqNQeWfFIykFjBz4v7nrX4RWfh6jhjVHp6lTHKnw\",\n    \"tokenType\": \"Bearer\",\n    \"expiresIn\": 3600\n}"
+				}
+			]
+		},
+		{
+			"name": "inquiry",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function getPath(url) {",
+							"    var pathRegex = /.+?\\:\\/\\/.+?(\\/.+?)(?:#|\\?|$)/;",
+							"    var result = url.match(pathRegex);",
+							"    return result && result.length > 1 ? result[1] : ''; ",
+							"}",
+							" ",
+							"function getQueryString(url) {",
+							"    var arrSplit = url.split('?');",
+							"    return arrSplit.length > 1 ? url.substring(url.indexOf('?')+1) : ''; ",
+							"}",
+							" ",
+							"function getAuthHeader(httpMethod, requestUrl, requestBody) {",
+							"    var requestPath = getPath(requestUrl);",
+							"    var queryString = getQueryString(requestUrl);",
+							"    ",
+							"    if (httpMethod == 'GET' || !requestBody) {",
+							"        requestBody = ''; ",
+							"    } else {",
+							"        requestBody = requestBody;",
+							"    }",
+							"    ",
+							"    Date.prototype.toIsoString = function() {",
+							"        var tzo = -this.getTimezoneOffset(),",
+							"            dif = tzo >= 0 ? '+' : '-',",
+							"            pad = function(num) {",
+							"                var norm = Math.floor(Math.abs(num));",
+							"                return (norm < 10 ? '0' : '') + norm;",
+							"            };",
+							"        return this.getFullYear() +",
+							"            '-' + pad(this.getMonth() + 1) +",
+							"            '-' + pad(this.getDate()) +",
+							"            'T' + pad(this.getHours()) +",
+							"            ':' + pad(this.getMinutes()) +",
+							"            ':' + pad(this.getSeconds()) +",
+							"            '.' + this.getMilliseconds() + ",
+							"            dif + pad(tzo / 60) +",
+							"            ':' + pad(tzo % 60);",
+							"    }",
+							"",
+							"    var dt = new Date();",
+							"    var timestamp = dt.toIsoString();",
+							"    postman.setEnvironmentVariable('timestamp', timestamp);",
+							"",
+							"    console.log(JSON.stringify(JSON.parse(requestBody), null, 0));",
+							"",
+							"    var hash = CryptoJS.SHA256(JSON.stringify(JSON.parse(requestBody), null, 0));",
+							"",
+							"    payload = `${httpMethod}:${requestPath}:${pm.globals.get('access_token_bri')}:${",
+							"      hash.toString(CryptoJS.enc.Hex)}:${timestamp}`;",
+							"",
+							"    postman.setEnvironmentVariable('signature_payload', payload);",
+							"    ",
+							"    console.log('payload ', payload)",
+							"    console.log('pm.environment.get(\"client_secret\") ', pm.environment.get('client_secret'))",
+							"    var hmacSignature = CryptoJS.HmacSHA512(payload, pm.environment.get('client_secret'));",
+							"    return hmacSignature;",
+							"}",
+							"",
+							"postman.setEnvironmentVariable('signature', getAuthHeader(request['method'], request['url'], request['data']));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token_bri}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-SIGNATURE",
+						"value": "{{signature}}",
+						"type": "text"
+					},
+					{
+						"key": "X-TIMESTAMP",
+						"value": "{{timestamp}}",
+						"type": "text"
+					},
+					{
+						"key": "X-PARTNER-ID",
+						"value": "MHFTN2pNWVZlNmdvc0RBSzpkVlpLb3ZLeVliTFNFbGc5",
+						"type": "text"
+					},
+					{
+						"key": "X-EXTERNAL-ID",
+						"value": "12345",
+						"type": "text"
+					},
+					{
+						"key": "CHANNEL-ID",
+						"value": "12345",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"partnerServiceId\": \"00011187\",\n    \"customerNo\": \"0000000000001\",\n    \"virtualAccountNo\": \"000111870000000000001\",\n    \"amount\": {\n        \"value\": \"19000000.00\",\n        \"currency\": \"IDR\"\n    },\n    \"trxDateInit\": \"2021-11-25T15:01:07+07:00\",\n    \"channelCode\": \"1\",\n    \"sourceBankCode\": \"002\",\n    \"passApp\": \"b7aee423dc7489dfa868 426e5c950c677925f3b9\",\n    \"inquiryRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n    \"additionalInfo\": {\n        \"idApp\": \"Getkons App\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/snap/transfer-va/inquiry",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"snap",
+						"transfer-va",
+						"inquiry"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "inquiry",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-SIGNATURE",
+								"value": "{{signature}}",
+								"type": "text"
+							},
+							{
+								"key": "X-TIMESTAMP",
+								"value": "{{timestamp}}",
+								"type": "text"
+							},
+							{
+								"key": "X-PARTNER-ID",
+								"value": "12345",
+								"type": "text"
+							},
+							{
+								"key": "X-EXTERNAL-ID",
+								"value": "12345",
+								"type": "text"
+							},
+							{
+								"key": "CHANNEL-ID",
+								"value": "12345",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"partnerServiceId\": \"00011187\",\n    \"customerNo\": \"0000000000002\",\n    \"virtualAccountNo\": \"000111870000000000002\",\n    \"amount\": {\n        \"value\": \"19000000.00\",\n        \"currency\": \"IDR\"\n    },\n    \"trxDateInit\": \"2021-11-25T15:01:07+07:00\",\n    \"channelCode\": \"1\",\n    \"sourceBankCode\": \"002\",\n    \"passApp\": \"b7aee423dc7489dfa868 426e5c950c677925f3b9\",\n    \"inquiryRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n    \"additionalInfo\": {\n        \"idApp\": \"Getkons App\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/snap/transfer-va/inquiry",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"snap",
+								"transfer-va",
+								"inquiry"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Mon, 25 Sep 2023 05:05:27 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "content-security-policy",
+							"value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+						},
+						{
+							"key": "cross-origin-embedder-policy",
+							"value": "require-corp"
+						},
+						{
+							"key": "cross-origin-opener-policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "cross-origin-resource-policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"184-PhtGwrFGi9ZwF0dTVIgkslL5Jps\""
+						},
+						{
+							"key": "origin-agent-cluster",
+							"value": "?1"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "strict-transport-security",
+							"value": "max-age=15552000; includeSubDomains"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-correlation-id",
+							"value": "8eae3b3e-86dc-4bb7-8bea-720462fcd5e7"
+						},
+						{
+							"key": "x-dns-prefetch-control",
+							"value": "off"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=HdZ8Z5VYQQwaQDzyB0y5yXiBdz53vqy0WHilTLngV5cvIFcNwkXDnwZjCQn%2FZy9f8zjkle5qoiGpRYYO6ZwVSmxgmZRbzUKBnafd748Nnb04H9uFQKo0xwQzs%2FENKxyCloCSx8FOCUTY\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "80c0bb6dcb0e9c2e-IAD"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"responseCode\": \"2002400\",\n    \"responseMessage\": \"Successfull\",\n    \"virtualAccountData\": {\n        \"partnerServiceId\": \"00011187\",\n        \"customerNo\": \"0000000000002\",\n        \"virtualAccountNo\": \"000111870000000000002\",\n        \"virtualAccountName\": \"John Doe\",\n        \"inquiryRequestId\": null,\n        \"totalAmount\": \"19000000.00\",\n        \"inquiryStatus\": \"00\",\n        \"inquiryReason\": {\n            \"english\": \"Success\",\n            \"indonesia\": \"Sukses\"\n        },\n        \"additionalInfo\": {\n            \"idApp\": \"Getkons App\"\n        }\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "payment",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function getPath(url) {",
+							"    var pathRegex = /.+?\\:\\/\\/.+?(\\/.+?)(?:#|\\?|$)/;",
+							"    var result = url.match(pathRegex);",
+							"    return result && result.length > 1 ? result[1] : ''; ",
+							"}",
+							" ",
+							"function getQueryString(url) {",
+							"    var arrSplit = url.split('?');",
+							"    return arrSplit.length > 1 ? url.substring(url.indexOf('?')+1) : ''; ",
+							"}",
+							" ",
+							"function getAuthHeader(httpMethod, requestUrl, requestBody) {",
+							"    var requestPath = getPath(requestUrl);",
+							"    var queryString = getQueryString(requestUrl);",
+							"    ",
+							"    if (httpMethod == 'GET' || !requestBody) {",
+							"        requestBody = ''; ",
+							"    } else {",
+							"        requestBody = requestBody;",
+							"    }",
+							"    ",
+							"    Date.prototype.toIsoString = function() {",
+							"        var tzo = -this.getTimezoneOffset(),",
+							"            dif = tzo >= 0 ? '+' : '-',",
+							"            pad = function(num) {",
+							"                var norm = Math.floor(Math.abs(num));",
+							"                return (norm < 10 ? '0' : '') + norm;",
+							"            };",
+							"        return this.getFullYear() +",
+							"            '-' + pad(this.getMonth() + 1) +",
+							"            '-' + pad(this.getDate()) +",
+							"            'T' + pad(this.getHours()) +",
+							"            ':' + pad(this.getMinutes()) +",
+							"            ':' + pad(this.getSeconds()) +",
+							"            '.' + this.getMilliseconds() + ",
+							"            dif + pad(tzo / 60) +",
+							"            ':' + pad(tzo % 60);",
+							"    }",
+							"",
+							"    var dt = new Date();",
+							"    var timestamp = dt.toIsoString();",
+							"    postman.setEnvironmentVariable('timestamp', timestamp);",
+							"",
+							"    console.log(JSON.stringify(JSON.parse(requestBody), null, 0));",
+							"",
+							"    var hash = CryptoJS.SHA256(JSON.stringify(JSON.parse(requestBody), null, 0));",
+							"",
+							"    payload = `${httpMethod}:${requestPath}:${pm.globals.get('access_token_bri')}:${",
+							"      hash.toString(CryptoJS.enc.Hex)}:${timestamp}`;",
+							"",
+							"    postman.setEnvironmentVariable('signature_payload', payload);",
+							"    ",
+							"    console.log('payload ', payload)",
+							"    console.log('pm.environment.get(\"client_secret\") ', pm.environment.get('client_secret'))",
+							"    var hmacSignature = CryptoJS.HmacSHA512(payload, pm.environment.get('client_secret'));",
+							"    return hmacSignature;",
+							"}",
+							"",
+							"postman.setEnvironmentVariable('signature', getAuthHeader(request['method'], request['url'], request['data']));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token_bri}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-SIGNATURE",
+						"value": "{{signature}}",
+						"type": "text"
+					},
+					{
+						"key": "X-TIMESTAMP",
+						"value": "{{timestamp}}",
+						"type": "text"
+					},
+					{
+						"key": "X-PARTNER-ID",
+						"value": "MHFTN2pNWVZlNmdvc0RBSzpkVlpLb3ZLeVliTFNFbGc5",
+						"type": "text"
+					},
+					{
+						"key": "X-EXTERNAL-ID",
+						"value": "12345",
+						"type": "text"
+					},
+					{
+						"key": "CHANNEL-ID",
+						"value": "12345",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"partnerServiceId\": \"00011187\",\n    \"customerNo\": \"0000000000001\",\n    \"virtualAccountNo\": \"000111870000000000001\",\n    \"virtualAccountName\": \"John Doe\",\n    \"paidAmount\": {\n        \"value\": \"19000000.00\",\n        \"currency\": \"IDR\"\n    },\n    \"trxDateTime\": \"2021-11-25T22:56:31+07:00\",\n    \"channelCode\": 1,\n    \"sourceBankCode\": \"002\",\n    \"trxId\": \"2132902068917559061\",\n    \"paymentRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n    \"hashedSourceAccountNo\": \"kmlm234k2nnsoebr997\",\n    \"additionalInfo\": {\n        \"idApp\": \"Getkons App\",\n        \"passApp\": \"b7aee423dc7489dfa868 426e5c950c677925f3b9\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/snap/transfer-va/payment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"snap",
+						"transfer-va",
+						"payment"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "payment",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-SIGNATURE",
+								"value": "{{signature}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "X-TIMESTAMP",
+								"value": "{{timestamp}}",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "X-PARTNER-ID",
+								"value": "12345",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "X-EXTERNAL-ID",
+								"value": "12345",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "CHANNEL-ID",
+								"value": "12345",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"partnerServiceId\": \"00011187\",\n    \"customerNo\": \"0000000000002\",\n    \"virtualAccountNo\": \"000111870000000000002\",\n    \"virtualAccountName\": \"John Doe\",\n    \"paidAmount\": {\n        \"value\": \"19000000.00\",\n        \"currency\": \"IDR\"\n    },\n    \"trxDateInit\": \"2021-11-25T15:01:07+07:00\",\n    \"channelCode\": \"1\",\n    \"sourceBankCode\": \"002\",\n    \"paymentRequestId\": \"72064b48-c277-4f98-ae27-feb4a0a89d83\",\n    \"passApp\": \"b7aee423dc7489dfa868 426e5c950c677925f3b9\",\n    \"inquiryRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n    \"additionalInfo\": {\n        \"idApp\": \"Getkons App\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/snap/transfer-va/payment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"snap",
+								"transfer-va",
+								"payment"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Mon, 25 Sep 2023 05:08:16 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "access-control-allow-origin",
+							"value": "*"
+						},
+						{
+							"key": "content-security-policy",
+							"value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+						},
+						{
+							"key": "cross-origin-embedder-policy",
+							"value": "require-corp"
+						},
+						{
+							"key": "cross-origin-opener-policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "cross-origin-resource-policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"1e7-9nbOWJsAT7dyr/CxCnf5jvcD8GQ\""
+						},
+						{
+							"key": "origin-agent-cluster",
+							"value": "?1"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "strict-transport-security",
+							"value": "max-age=15552000; includeSubDomains"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-correlation-id",
+							"value": "587fbeb0-ad58-46ce-bfd9-197a63dbd2a3"
+						},
+						{
+							"key": "x-dns-prefetch-control",
+							"value": "off"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=1TlvUO88fe3SsFUcRKTMmLvN4bpvO9VPk6jdVPAQsgSwUMCLDNVm2jnpVL6YIjX%2FeNHf7wx%2BJqQgb93U9F0xjFVDa4IhwrbW0JmgupxnglNCi2i%2FRV39jRBv01c6VO60OUq7T2Sh8Nz6\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "80c0bf90eff92894-IAD"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"responseCode\": \"2002500\",\n    \"responseMessage\": \"Successfull\",\n    \"virtualAccountData\": {\n        \"partnerServiceId\": \"00011187\",\n        \"customerNo\": \"0000000000002\",\n        \"virtualAccountNo\": \"000111870000000000002\",\n        \"virtualAccountName\": \"John Doe\",\n        \"inquiryRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n        \"paymentRequestId\": \"72064b48-c277-4f98-ae27-feb4a0a89d83\",\n        \"paidAmount\": \"19000000.00\",\n        \"paymentFlagStatus\": \"00\",\n        \"paymentFlagReason\": {\n            \"english\": \"Success\",\n            \"indonesia\": \"Sukses\"\n        },\n        \"additionalInfo\": {\n            \"idApp\": \"Getkons App\"\n        }\n    }\n}"
+				}
+			]
+		}
+	]
+}
