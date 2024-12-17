@@ -2,11 +2,14 @@ const express = require("express")
 const app = express()
 const PORT = 3000
 
+app.use(express.json())
+
 app.get("/", (_, res) => res.send("Hello world"))
 
+const accessToken = require("./access-token")
 const authSignature = require("./auth-signature")
 
-app.post("/snap/access-token", authSignature, (_, __) => {})
+app.post("/snap/access-token", accessToken)
 app.post("/snap/transfer-va/inquiry", authSignature, (req, res) => res.json(req.body))
 app.post("/snap/transfer-va/payment", authSignature, (req, res) => res.json(req.body))
 app.use((_, res) => {
