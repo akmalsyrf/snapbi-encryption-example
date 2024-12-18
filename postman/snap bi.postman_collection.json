@@ -220,23 +220,32 @@
 							"",
 							"var dt = new Date();",
 							"var timestamp = dt.toIsoString();",
-							"postman.setEnvironmentVariable('timestamp', timestamp);",
+							"pm.environment.set('timestamp', timestamp);",
 							"",
 							"var prvKeyPEM = pm.environment.get(\"private_key\");",
 							"var clientid = pm.environment.get(\"client_id\");",
 							"",
 							"",
-							"console.log(prvKeyPEM);",
+							"console.log(\"prvKeyPEM \", prvKeyPEM);",
 							"",
 							"// Use 'jsrsasign' library",
 							"const base64String = pmlib.rs.stob64u('My amazing string')",
 							"console.log('Url Base64 string: ' + base64String)",
 							"",
 							"var sig = new pmlib.rs.KJUR.crypto.Signature({\"alg\": \"SHA256withRSA\"});",
-							"console.log(sig);",
-							"sig.init(prvKeyPEM);",
+							"",
+							"console.log(\"sig \", sig);",
+							"",
+							"try{",
+							"sig.init(prvKeyPEM)",
+							"} catch(e) {",
+							"    console.error(\"Err: \", e)",
+							"}",
+							"",
 							"sig.updateString(clientid+'|'+timestamp);",
-							"var hSigVal = sig.sign();",
+							"var hSigVal = sig.sign()",
+							"",
+							"console.log('hSigVal ', hSigVal)",
 							"",
 							"postman.setEnvironmentVariable('signature', hexToBase64(hSigVal));",
 							"postman.setEnvironmentVariable('signature_hex', hSigVal);",
@@ -257,7 +266,7 @@
 					"script": {
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);",
-							"pm.globals.set(\"access_token_bri\", jsonData.accessToken);"
+							"pm.globals.set(\"access_token\", jsonData.accessToken);"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -483,7 +492,7 @@
 							"",
 							"    var hash = CryptoJS.SHA256(JSON.stringify(JSON.parse(requestBody), null, 0));",
 							"",
-							"    payload = `${httpMethod}:${requestPath}:${pm.globals.get('access_token_bri')}:${",
+							"    payload = `${httpMethod}:${requestPath}:${pm.globals.get('access_token')}:${",
 							"      hash.toString(CryptoJS.enc.Hex)}:${timestamp}`;",
 							"",
 							"    postman.setEnvironmentVariable('signature_payload', payload);",
@@ -507,7 +516,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{access_token_bri}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -526,17 +535,7 @@
 					},
 					{
 						"key": "X-PARTNER-ID",
-						"value": "MHFTN2pNWVZlNmdvc0RBSzpkVlpLb3ZLeVliTFNFbGc5",
-						"type": "text"
-					},
-					{
-						"key": "X-EXTERNAL-ID",
-						"value": "12345",
-						"type": "text"
-					},
-					{
-						"key": "CHANNEL-ID",
-						"value": "12345",
+						"value": "{{partner_key}}",
 						"type": "text"
 					},
 					{
@@ -547,7 +546,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"partnerServiceId\": \"00011187\",\n    \"customerNo\": \"0000000000001\",\n    \"virtualAccountNo\": \"000111870000000000001\",\n    \"amount\": {\n        \"value\": \"19000000.00\",\n        \"currency\": \"IDR\"\n    },\n    \"trxDateInit\": \"2021-11-25T15:01:07+07:00\",\n    \"channelCode\": \"1\",\n    \"sourceBankCode\": \"002\",\n    \"passApp\": \"b7aee423dc7489dfa868 426e5c950c677925f3b9\",\n    \"inquiryRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n    \"additionalInfo\": {\n        \"idApp\": \"Getkons App\"\n    }\n}",
+					"raw": "{\n    \"partnerServiceId\": \"00011187\",\n    \"customerNo\": \"0000000000001\",\n    \"virtualAccountNo\": \"000111870000000000001\",\n    \"amount\": {\n        \"value\": \"19000000.00\",\n        \"currency\": \"IDR\"\n    },\n    \"trxDateInit\": \"2021-11-25T15:01:07+07:00\",\n    \"channelCode\": \"1\",\n    \"sourceBankCode\": \"002\",\n    \"passApp\": \"b7aee423dc7489dfa868 426e5c950c677925f3b9\",\n    \"inquiryRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n    \"additionalInfo\": {\n        \"idApp\": \"App\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -568,178 +567,7 @@
 					]
 				}
 			},
-			"response": [
-				{
-					"name": "inquiry",
-					"originalRequest": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "X-SIGNATURE",
-								"value": "{{signature}}",
-								"type": "text"
-							},
-							{
-								"key": "X-TIMESTAMP",
-								"value": "{{timestamp}}",
-								"type": "text"
-							},
-							{
-								"key": "X-PARTNER-ID",
-								"value": "12345",
-								"type": "text"
-							},
-							{
-								"key": "X-EXTERNAL-ID",
-								"value": "12345",
-								"type": "text"
-							},
-							{
-								"key": "CHANNEL-ID",
-								"value": "12345",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"partnerServiceId\": \"00011187\",\n    \"customerNo\": \"0000000000002\",\n    \"virtualAccountNo\": \"000111870000000000002\",\n    \"amount\": {\n        \"value\": \"19000000.00\",\n        \"currency\": \"IDR\"\n    },\n    \"trxDateInit\": \"2021-11-25T15:01:07+07:00\",\n    \"channelCode\": \"1\",\n    \"sourceBankCode\": \"002\",\n    \"passApp\": \"b7aee423dc7489dfa868 426e5c950c677925f3b9\",\n    \"inquiryRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n    \"additionalInfo\": {\n        \"idApp\": \"Getkons App\"\n    }\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/snap/transfer-va/inquiry",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"snap",
-								"transfer-va",
-								"inquiry"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Date",
-							"value": "Mon, 25 Sep 2023 05:05:27 GMT"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Transfer-Encoding",
-							"value": "chunked"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "access-control-allow-origin",
-							"value": "*"
-						},
-						{
-							"key": "content-security-policy",
-							"value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
-						},
-						{
-							"key": "cross-origin-embedder-policy",
-							"value": "require-corp"
-						},
-						{
-							"key": "cross-origin-opener-policy",
-							"value": "same-origin"
-						},
-						{
-							"key": "cross-origin-resource-policy",
-							"value": "same-origin"
-						},
-						{
-							"key": "etag",
-							"value": "W/\"184-PhtGwrFGi9ZwF0dTVIgkslL5Jps\""
-						},
-						{
-							"key": "origin-agent-cluster",
-							"value": "?1"
-						},
-						{
-							"key": "referrer-policy",
-							"value": "no-referrer"
-						},
-						{
-							"key": "strict-transport-security",
-							"value": "max-age=15552000; includeSubDomains"
-						},
-						{
-							"key": "x-content-type-options",
-							"value": "nosniff"
-						},
-						{
-							"key": "x-correlation-id",
-							"value": "8eae3b3e-86dc-4bb7-8bea-720462fcd5e7"
-						},
-						{
-							"key": "x-dns-prefetch-control",
-							"value": "off"
-						},
-						{
-							"key": "x-download-options",
-							"value": "noopen"
-						},
-						{
-							"key": "x-frame-options",
-							"value": "SAMEORIGIN"
-						},
-						{
-							"key": "x-permitted-cross-domain-policies",
-							"value": "none"
-						},
-						{
-							"key": "x-xss-protection",
-							"value": "0"
-						},
-						{
-							"key": "CF-Cache-Status",
-							"value": "DYNAMIC"
-						},
-						{
-							"key": "Report-To",
-							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=HdZ8Z5VYQQwaQDzyB0y5yXiBdz53vqy0WHilTLngV5cvIFcNwkXDnwZjCQn%2FZy9f8zjkle5qoiGpRYYO6ZwVSmxgmZRbzUKBnafd748Nnb04H9uFQKo0xwQzs%2FENKxyCloCSx8FOCUTY\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
-						},
-						{
-							"key": "NEL",
-							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
-						},
-						{
-							"key": "Server",
-							"value": "cloudflare"
-						},
-						{
-							"key": "CF-RAY",
-							"value": "80c0bb6dcb0e9c2e-IAD"
-						},
-						{
-							"key": "Content-Encoding",
-							"value": "gzip"
-						},
-						{
-							"key": "alt-svc",
-							"value": "h3=\":443\"; ma=86400"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"responseCode\": \"2002400\",\n    \"responseMessage\": \"Successfull\",\n    \"virtualAccountData\": {\n        \"partnerServiceId\": \"00011187\",\n        \"customerNo\": \"0000000000002\",\n        \"virtualAccountNo\": \"000111870000000000002\",\n        \"virtualAccountName\": \"John Doe\",\n        \"inquiryRequestId\": null,\n        \"totalAmount\": \"19000000.00\",\n        \"inquiryStatus\": \"00\",\n        \"inquiryReason\": {\n            \"english\": \"Success\",\n            \"indonesia\": \"Sukses\"\n        },\n        \"additionalInfo\": {\n            \"idApp\": \"Getkons App\"\n        }\n    }\n}"
-				}
-			]
+			"response": []
 		},
 		{
 			"name": "payment",
@@ -795,7 +623,7 @@
 							"",
 							"    var hash = CryptoJS.SHA256(JSON.stringify(JSON.parse(requestBody), null, 0));",
 							"",
-							"    payload = `${httpMethod}:${requestPath}:${pm.globals.get('access_token_bri')}:${",
+							"    payload = `${httpMethod}:${requestPath}:${pm.globals.get('access_token')}:${",
 							"      hash.toString(CryptoJS.enc.Hex)}:${timestamp}`;",
 							"",
 							"    postman.setEnvironmentVariable('signature_payload', payload);",
@@ -819,7 +647,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{access_token_bri}}",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -838,17 +666,7 @@
 					},
 					{
 						"key": "X-PARTNER-ID",
-						"value": "MHFTN2pNWVZlNmdvc0RBSzpkVlpLb3ZLeVliTFNFbGc5",
-						"type": "text"
-					},
-					{
-						"key": "X-EXTERNAL-ID",
-						"value": "12345",
-						"type": "text"
-					},
-					{
-						"key": "CHANNEL-ID",
-						"value": "12345",
+						"value": "{{partner_key}}",
 						"type": "text"
 					},
 					{
@@ -859,7 +677,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"partnerServiceId\": \"00011187\",\n    \"customerNo\": \"0000000000001\",\n    \"virtualAccountNo\": \"000111870000000000001\",\n    \"virtualAccountName\": \"John Doe\",\n    \"paidAmount\": {\n        \"value\": \"19000000.00\",\n        \"currency\": \"IDR\"\n    },\n    \"trxDateTime\": \"2021-11-25T22:56:31+07:00\",\n    \"channelCode\": 1,\n    \"sourceBankCode\": \"002\",\n    \"trxId\": \"2132902068917559061\",\n    \"paymentRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n    \"hashedSourceAccountNo\": \"kmlm234k2nnsoebr997\",\n    \"additionalInfo\": {\n        \"idApp\": \"Getkons App\",\n        \"passApp\": \"b7aee423dc7489dfa868 426e5c950c677925f3b9\"\n    }\n}",
+					"raw": "{\n    \"partnerServiceId\": \"00011187\",\n    \"customerNo\": \"0000000000001\",\n    \"virtualAccountNo\": \"000111870000000000001\",\n    \"virtualAccountName\": \"John Doe\",\n    \"paidAmount\": {\n        \"value\": \"19000000.00\",\n        \"currency\": \"IDR\"\n    },\n    \"trxDateTime\": \"2021-11-25T22:56:31+07:00\",\n    \"channelCode\": 1,\n    \"sourceBankCode\": \"002\",\n    \"trxId\": \"2132902068917559061\",\n    \"paymentRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n    \"hashedSourceAccountNo\": \"kmlm234k2nnsoebr997\",\n    \"additionalInfo\": {\n        \"idApp\": \"App\",\n        \"passApp\": \"b7aee423dc7489dfa868 426e5c950c677925f3b9\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -880,183 +698,7 @@
 					]
 				}
 			},
-			"response": [
-				{
-					"name": "payment",
-					"originalRequest": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "X-SIGNATURE",
-								"value": "{{signature}}",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-TIMESTAMP",
-								"value": "{{timestamp}}",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-PARTNER-ID",
-								"value": "12345",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "X-EXTERNAL-ID",
-								"value": "12345",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "CHANNEL-ID",
-								"value": "12345",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"partnerServiceId\": \"00011187\",\n    \"customerNo\": \"0000000000002\",\n    \"virtualAccountNo\": \"000111870000000000002\",\n    \"virtualAccountName\": \"John Doe\",\n    \"paidAmount\": {\n        \"value\": \"19000000.00\",\n        \"currency\": \"IDR\"\n    },\n    \"trxDateInit\": \"2021-11-25T15:01:07+07:00\",\n    \"channelCode\": \"1\",\n    \"sourceBankCode\": \"002\",\n    \"paymentRequestId\": \"72064b48-c277-4f98-ae27-feb4a0a89d83\",\n    \"passApp\": \"b7aee423dc7489dfa868 426e5c950c677925f3b9\",\n    \"inquiryRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n    \"additionalInfo\": {\n        \"idApp\": \"Getkons App\"\n    }\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/snap/transfer-va/payment",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"snap",
-								"transfer-va",
-								"payment"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Date",
-							"value": "Mon, 25 Sep 2023 05:08:16 GMT"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Transfer-Encoding",
-							"value": "chunked"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "access-control-allow-origin",
-							"value": "*"
-						},
-						{
-							"key": "content-security-policy",
-							"value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
-						},
-						{
-							"key": "cross-origin-embedder-policy",
-							"value": "require-corp"
-						},
-						{
-							"key": "cross-origin-opener-policy",
-							"value": "same-origin"
-						},
-						{
-							"key": "cross-origin-resource-policy",
-							"value": "same-origin"
-						},
-						{
-							"key": "etag",
-							"value": "W/\"1e7-9nbOWJsAT7dyr/CxCnf5jvcD8GQ\""
-						},
-						{
-							"key": "origin-agent-cluster",
-							"value": "?1"
-						},
-						{
-							"key": "referrer-policy",
-							"value": "no-referrer"
-						},
-						{
-							"key": "strict-transport-security",
-							"value": "max-age=15552000; includeSubDomains"
-						},
-						{
-							"key": "x-content-type-options",
-							"value": "nosniff"
-						},
-						{
-							"key": "x-correlation-id",
-							"value": "587fbeb0-ad58-46ce-bfd9-197a63dbd2a3"
-						},
-						{
-							"key": "x-dns-prefetch-control",
-							"value": "off"
-						},
-						{
-							"key": "x-download-options",
-							"value": "noopen"
-						},
-						{
-							"key": "x-frame-options",
-							"value": "SAMEORIGIN"
-						},
-						{
-							"key": "x-permitted-cross-domain-policies",
-							"value": "none"
-						},
-						{
-							"key": "x-xss-protection",
-							"value": "0"
-						},
-						{
-							"key": "CF-Cache-Status",
-							"value": "DYNAMIC"
-						},
-						{
-							"key": "Report-To",
-							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=1TlvUO88fe3SsFUcRKTMmLvN4bpvO9VPk6jdVPAQsgSwUMCLDNVm2jnpVL6YIjX%2FeNHf7wx%2BJqQgb93U9F0xjFVDa4IhwrbW0JmgupxnglNCi2i%2FRV39jRBv01c6VO60OUq7T2Sh8Nz6\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
-						},
-						{
-							"key": "NEL",
-							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
-						},
-						{
-							"key": "Server",
-							"value": "cloudflare"
-						},
-						{
-							"key": "CF-RAY",
-							"value": "80c0bf90eff92894-IAD"
-						},
-						{
-							"key": "Content-Encoding",
-							"value": "gzip"
-						},
-						{
-							"key": "alt-svc",
-							"value": "h3=\":443\"; ma=86400"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"responseCode\": \"2002500\",\n    \"responseMessage\": \"Successfull\",\n    \"virtualAccountData\": {\n        \"partnerServiceId\": \"00011187\",\n        \"customerNo\": \"0000000000002\",\n        \"virtualAccountNo\": \"000111870000000000002\",\n        \"virtualAccountName\": \"John Doe\",\n        \"inquiryRequestId\": \"065ad3ca-2490-44 328a29-0a9a7ce4904b\",\n        \"paymentRequestId\": \"72064b48-c277-4f98-ae27-feb4a0a89d83\",\n        \"paidAmount\": \"19000000.00\",\n        \"paymentFlagStatus\": \"00\",\n        \"paymentFlagReason\": {\n            \"english\": \"Success\",\n            \"indonesia\": \"Sukses\"\n        },\n        \"additionalInfo\": {\n            \"idApp\": \"Getkons App\"\n        }\n    }\n}"
-				}
-			]
+			"response": []
 		}
 	]
 }

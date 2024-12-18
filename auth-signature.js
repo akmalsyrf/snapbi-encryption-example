@@ -1,12 +1,5 @@
 const CryptoJS = require('crypto-js');
-const { briKey } = require('./config');
-
-const getPath = (url) => {
-  // eslint-disable-next-line no-useless-escape
-  const pathRegex = /.+?\:\/\/.+?(\/.+?)(?:#|\?|$)/;
-  const result = url.match(pathRegex);
-  return result && result.length > 1 ? result[1] : '';
-}
+const { snapKey } = require('./config');
 
 module.exports = async (req, res, next) => {
   const { method } = req;
@@ -14,13 +7,14 @@ module.exports = async (req, res, next) => {
   const timestamp = req.headers['x-timestamp'] || undefined;
   const signature = req.headers['x-signature'] || undefined;
   const accessToken = (req.headers.authorization && req.headers.authorization.replace('Bearer ', '')) || undefined;
-  const endpointUrl = getPath(req.url)
+  const endpointUrl = req.url
   const urlCode = req.url === '/inquiry' ? '24' : '25'
 
   if (partnerId && timestamp && signature && accessToken) {
     const decryptedKey = Buffer.from(partnerId, 'base64').toString();
     const splitKey = decryptedKey.split(':');
-    if (splitKey[0] !== briKey.publicKey || splitKey[1] !== briKey.privateKey) {
+
+    if (splitKey[0] !== snapKey.secret || splitKey[1] !== snapKey.public) {
       return res.status(400).send({
         responseCode: `${400}${urlCode}00`,
         responseMessage: 'Unauthorized.'
@@ -30,10 +24,10 @@ module.exports = async (req, res, next) => {
     const hash = CryptoJS.SHA256(JSON.stringify(req.body), null, 0);
   
     const stringToSign = `${method}:${endpointUrl}:${accessToken}:${hash.toString(CryptoJS.enc.Hex)}:${timestamp}`;
-    const hmacSignature = CryptoJS.enc.Hex.stringify(CryptoJS.HmacSHA512(stringToSign, briKey.clientSecret));
+    const hmacSignature = CryptoJS.enc.Hex.stringify(CryptoJS.HmacSHA512(stringToSign, snapKey.secret));
   
-    console.log('Signature BRI Auth', signature.toLowerCase())
-    console.log('HMAC Signature BRI Auth', hmacSignature.toLowerCase())
+    console.log('Signature Auth', signature.toLowerCase())
+    console.log('HMAC Signature Auth', hmacSignature.toLowerCase())
   
     if (hmacSignature.toLowerCase() !== signature.toLowerCase()) {
       return res.status(401).send({
