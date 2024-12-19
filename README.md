@@ -65,7 +65,7 @@ Before using this project, ensure you have the following installed:
 
 Ensure you complete the following environment in postman and your API server:
 
-### Needed from partner (A.K.A us)
+### Needed from partner (A.K.A our app)
 - `client_id`: Public id from partner.
 - `client_secret`: Secret from partner.
 
@@ -100,6 +100,12 @@ module.exports = async (req, res, next) => {
 
 }
 ```
+
+## Flowchart
+
+Below is the flowchart illustrating the process:
+
+![Flowchart](./public/flow.png)
 
 ## Contributing
 
